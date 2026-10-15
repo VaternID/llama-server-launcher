@@ -1855,6 +1855,32 @@ class ServerTabFrame(ttk.Frame):
                 pass
         self.global_manager._update_tab_name(self.server_id)
 
+    # --- Parameter search ---
+
+    @staticmethod
+    def _field_search_terms(f):
+        terms = [f.get("label", ""), f.get("key", ""), f.get("help", ""), f.get("category", "")]
+        for k in ("flag", "on_flag", "off_flag"):
+            val = f.get(k)
+            if val:
+                terms.append(val)
+        terms.extend(f.get("aliases", []))
+        return terms
+
+    def apply_search(self, query=""):
+        """Filter visible parameters in all tabs. Returns number of matched fields."""
+        q = (query or "").strip().lower()
+        matched = set()
+        for content, fields, frame, name in self.tab_content_frames:
+            if q:
+                shown = [f for f in fields
+                         if any(q in t.lower() for t in self._field_search_terms(f))]
+                matched.update(f["key"] for f in shown)
+            else:
+                shown = fields
+            self._refresh_tab_content(content, shown)
+        return len(matched)
+
 class MultiServerLauncherApp:
     def __init__(self, root):
         self.root = root
@@ -1887,8 +1913,35 @@ class MultiServerLauncherApp:
         self.root.config(menu=menubar)
 
     def _build_outer_notebook(self):
+        # Parameter search bar (above the server tabs)
+        search_bar = ttk.Frame(self.root, padding=(8, 4))
+        search_bar.pack(side="top", fill="x")
+        ttk.Label(search_bar, text="Search parameters:").pack(side="left")
+        self.search_var = tk.StringVar(value="")
+        self.search_var.trace_add("write", self._on_search_changed)
+        self.search_entry = ttk.Entry(search_bar, textvariable=self.search_var)
+        self.search_entry.pack(side="left", padx=(4, 8), fill="x", expand=True)
+        self.search_count_var = tk.StringVar(value="")
+        ttk.Label(search_bar, textvariable=self.search_count_var,
+                  foreground="#555").pack(side="left", padx=(0, 8))
+        ttk.Button(search_bar, text="Clear", command=self._clear_search).pack(side="left")
+
         self.outer_notebook = ttk.Notebook(self.root)
         self.outer_notebook.pack(side="top", fill="both", expand=True, padx=4, pady=4)
+
+    def _on_search_changed(self, *args):
+        q = self.search_var.get()
+        if not q.strip():
+            self.search_count_var.set("")
+        else:
+            total = 0
+            for server in self.servers:
+                total += server.apply_search(q)
+            self.search_count_var.set(f"{total} matching parameter(s)")
+
+    def _clear_search(self):
+        self.search_var.set("")
+        self.search_entry.focus_set()
 
     def set_server_count(self, count):
         current_count = len(self.servers)
@@ -1907,6 +1960,7 @@ class MultiServerLauncherApp:
                 
                 self.servers.append(server_frame)
                 self.outer_notebook.add(server_frame, text=default_name)
+                server_frame.apply_search(self.search_var.get())
         
         elif count < current_count:
             for i in range(current_count - 1, count - 1, -1):
