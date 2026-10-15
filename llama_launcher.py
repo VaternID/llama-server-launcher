@@ -12,6 +12,8 @@ from datetime import datetime
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
+sys.dont_write_bytecode = True
+
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(APP_DIR, "llama_launcher_config.json")
 if getattr(sys, "frozen", False):
@@ -1855,8 +1857,6 @@ class ServerTabFrame(ttk.Frame):
                 pass
         self.global_manager._update_tab_name(self.server_id)
 
-    # --- Parameter search ---
-
     @staticmethod
     def _field_search_terms(f):
         terms = [f.get("label", ""), f.get("key", ""), f.get("help", ""), f.get("category", "")]
@@ -1913,7 +1913,6 @@ class MultiServerLauncherApp:
         self.root.config(menu=menubar)
 
     def _build_outer_notebook(self):
-        # Parameter search bar (above the server tabs)
         search_bar = ttk.Frame(self.root, padding=(8, 4))
         search_bar.pack(side="top", fill="x")
         ttk.Label(search_bar, text="Search parameters:").pack(side="left")
