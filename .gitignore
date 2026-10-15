@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Launcher runtime files
+llama_launcher_config.json
+launcher.log
+logs/
+
+# External binaries (placed next to the launcher, not committed)
+llama-server.exe
+cloudflared.exe
+
+# Packaging / build output
+build/
+dist/
+*.spec
+
+# IDE
+.vscode/
+.idea/
