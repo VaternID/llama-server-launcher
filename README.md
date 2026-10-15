@@ -1,6 +1,6 @@
 # llama-server Launcher
 
-A simple GUI launcher for [llama.cpp](https://github.com/ggml-org/llama.cpp) `llama-server` using tktinker. 
+A simple GUI launcher for [llama.cpp](https://github.com/ggml-org/llama.cpp) `llama-server` using tkinter. 
 
 ## Requirements
 
