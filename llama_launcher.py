@@ -550,11 +550,12 @@ class LauncherApp:
         frame = ttk.Frame(self.notebook, padding=8)
         self.notebook.add(frame, text="Run")
         row = 0
-        ttk.Label(frame, text="Working directory (optional):").grid(row=row, column=0, sticky="w")
-        ttk.Entry(frame, textvariable=self.workdir_var, width=70).grid(row=row, column=1, sticky="we", padx=4)
-        ttk.Button(frame, text="Browse...", command=self._browse_workdir).grid(row=row, column=2)
+        wd_row = ttk.Frame(frame)
+        wd_row.grid(row=row, column=0, columnspan=3, sticky="we")
+        ttk.Label(wd_row, text="Working directory (optional):").pack(side="left")
+        ttk.Entry(wd_row, textvariable=self.workdir_var, width=70).pack(side="left", fill="x", expand=True, padx=(4, 0))
+        ttk.Button(wd_row, text="Browse...", command=self._browse_workdir).pack(side="left", padx=(4, 0))
         row += 1
-        ttk.Label(frame, text="Extra arguments (one flag + optional value per row):").grid(row=row, column=0, sticky="nw", pady=(6, 0))
         self.extra_args_frame = ttk.Frame(frame)
         self.extra_args_frame.grid(row=row, column=0, columnspan=3, sticky="we", padx=4, pady=(2, 4))
         if not self.extra_args_rows:
@@ -575,14 +576,16 @@ class LauncherApp:
         ttk.Button(btns, text="Copy Tunnel URL", command=self._copy_tunnel_url).pack(side="left", padx=2)
         ttk.Button(btns, text="Clear Console", command=self._clear_console).pack(side="left", padx=(20, 2))
         row += 1
-        ttk.Label(frame, text="Command preview:").grid(row=row, column=0, sticky="nw")
-        self.preview_text = tk.Text(frame, height=4, wrap="word")
-        self.preview_text.grid(row=row, column=1, columnspan=2, sticky="we", pady=4)
+        prev_row = ttk.Frame(frame)
+        prev_row.grid(row=row, column=0, columnspan=3, sticky="we", pady=4)
+        ttk.Label(prev_row, text="Command preview:").pack(side="left", anchor="n")
+        self.preview_text = tk.Text(prev_row, height=4, wrap="word")
+        self.preview_text.pack(side="left", fill="both", expand=True, padx=(4, 0))
 
         self.preview_text.bind("<KeyRelease>", lambda e: self._auto_sync_from_preview())
         self.preview_text.bind("<ButtonRelease>", lambda e: self._auto_sync_from_preview())
         row += 1
-        ttk.Label(frame, text="Console output:").grid(row=row, column=0, sticky="nw", pady=(8, 0))
+        ttk.Label(frame, text="Console output:", anchor="w").grid(row=row, column=0, sticky="nwe", pady=(8, 0))
         row += 1
         console_frame = ttk.Frame(frame)
         console_frame.grid(row=row, column=0, columnspan=3, sticky="nsew", pady=4)
@@ -600,9 +603,11 @@ class LauncherApp:
         console_frame.columnconfigure(0, weight=1)
 
         row += 1
-        ttk.Label(frame, text="Cloudflare Tunnel:").grid(row=row, column=0, sticky="w", pady=(12, 0))
-        tunnel_btns = ttk.Frame(frame)
-        tunnel_btns.grid(row=row, column=1, columnspan=2, sticky="w", pady=4)
+        tunnel_row = ttk.Frame(frame)
+        tunnel_row.grid(row=row, column=0, columnspan=3, sticky="we", pady=(12, 0))
+        ttk.Label(tunnel_row, text="Cloudflare Tunnel:").pack(side="left")
+        tunnel_btns = ttk.Frame(tunnel_row)
+        tunnel_btns.pack(side="left", fill="x", expand=True, padx=(4, 0))
         self.tunnel_start_btn = ttk.Button(tunnel_btns, text="Start Tunnel", command=self._start_tunnel)
         self.tunnel_start_btn.pack(side="left", padx=2)
         self.tunnel_stop_btn = ttk.Button(tunnel_btns, text="Stop Tunnel", command=self._stop_tunnel, state="disabled")
@@ -1275,11 +1280,12 @@ class ServerTabFrame(ttk.Frame):
         frame = ttk.Frame(self.notebook, padding=8)
         self.notebook.add(frame, text="Run")
         row = 0
-        ttk.Label(frame, text="Working directory (optional):").grid(row=row, column=0, sticky="w")
-        ttk.Entry(frame, textvariable=self.workdir_var, width=70).grid(row=row, column=1, sticky="we", padx=4)
-        ttk.Button(frame, text="Browse...", command=self._browse_workdir).grid(row=row, column=2)
+        wd_row = ttk.Frame(frame)
+        wd_row.grid(row=row, column=0, columnspan=3, sticky="we")
+        ttk.Label(wd_row, text="Working directory (optional):").pack(side="left")
+        ttk.Entry(wd_row, textvariable=self.workdir_var, width=70).pack(side="left", fill="x", expand=True, padx=(4, 0))
+        ttk.Button(wd_row, text="Browse...", command=self._browse_workdir).pack(side="left", padx=(4, 0))
         row += 1
-        ttk.Label(frame, text="Extra arguments (one flag + optional value per row):").grid(row=row, column=0, sticky="nw", pady=(6, 0))
         self.extra_args_frame = ttk.Frame(frame)
         self.extra_args_frame.grid(row=row, column=0, columnspan=3, sticky="we", padx=4, pady=(2, 4))
         if not self.extra_args_rows:
@@ -1300,14 +1306,16 @@ class ServerTabFrame(ttk.Frame):
         ttk.Button(btns, text="Copy Tunnel URL", command=self._copy_tunnel_url).pack(side="left", padx=2)
         ttk.Button(btns, text="Clear Console", command=self._clear_console).pack(side="left", padx=(20, 2))
         row += 1
-        ttk.Label(frame, text="Command preview:").grid(row=row, column=0, sticky="nw")
-        self.preview_text = tk.Text(frame, height=4, wrap="word")
-        self.preview_text.grid(row=row, column=1, columnspan=2, sticky="we", pady=4)
+        prev_row = ttk.Frame(frame)
+        prev_row.grid(row=row, column=0, columnspan=3, sticky="we", pady=4)
+        ttk.Label(prev_row, text="Command preview:").pack(side="left", anchor="n")
+        self.preview_text = tk.Text(prev_row, height=4, wrap="word")
+        self.preview_text.pack(side="left", fill="both", expand=True, padx=(4, 0))
 
         self.preview_text.bind("<KeyRelease>", lambda e: self._auto_sync_from_preview())
         self.preview_text.bind("<ButtonRelease>", lambda e: self._auto_sync_from_preview())
         row += 1
-        ttk.Label(frame, text="Console output:").grid(row=row, column=0, sticky="nw", pady=(8, 0))
+        ttk.Label(frame, text="Console output:", anchor="w").grid(row=row, column=0, sticky="nwe", pady=(8, 0))
         row += 1
         console_frame = ttk.Frame(frame)
         console_frame.grid(row=row, column=0, columnspan=3, sticky="nsew", pady=4)
@@ -1325,9 +1333,11 @@ class ServerTabFrame(ttk.Frame):
         console_frame.columnconfigure(0, weight=1)
 
         row += 1
-        ttk.Label(frame, text="Cloudflare Tunnel:").grid(row=row, column=0, sticky="w", pady=(12, 0))
-        tunnel_btns = ttk.Frame(frame)
-        tunnel_btns.grid(row=row, column=1, columnspan=2, sticky="w", pady=4)
+        tunnel_row = ttk.Frame(frame)
+        tunnel_row.grid(row=row, column=0, columnspan=3, sticky="we", pady=(12, 0))
+        ttk.Label(tunnel_row, text="Cloudflare Tunnel:").pack(side="left")
+        tunnel_btns = ttk.Frame(tunnel_row)
+        tunnel_btns.pack(side="left", fill="x", expand=True, padx=(4, 0))
         self.tunnel_start_btn = ttk.Button(tunnel_btns, text="Start Tunnel", command=self._start_tunnel)
         self.tunnel_start_btn.pack(side="left", padx=2)
         self.tunnel_stop_btn = ttk.Button(tunnel_btns, text="Stop Tunnel", command=self._stop_tunnel, state="disabled")
@@ -1868,7 +1878,6 @@ class ServerTabFrame(ttk.Frame):
         return terms
 
     def apply_search(self, query=""):
-        """Filter visible parameters in all tabs. Returns number of matched fields."""
         q = (query or "").strip().lower()
         matched = set()
         for content, fields, frame, name in self.tab_content_frames:
