@@ -7,7 +7,7 @@ A simple GUI launcher for [llama.cpp](https://github.com/ggml-org/llama.cpp) `ll
 ## Requirements
 
 - Python 3.10+ 
-- `llama-server.exe` from [llama.cpp v0.8.0](https://github.com/ggml-org/llama.cpp/releases/tag/v0.8.0) placed in the same folder as the launcher
+- `llama-server.exe` from [llama.cpp v1.0.0](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) placed in the same folder as the launcher
 - Optional: `cloudflared.exe` in the same folder, only if using the tunnel feature
 
 ## How to run
@@ -25,4 +25,4 @@ Then pick your model and args per server, hit Start. Settings are saved to `llam
 ## Note
 
 All flags and fields in this launcher match the
-[llama.cpp v0.8.0 release](https://github.com/ggml-org/llama.cpp/releases/tag/v0.8.0)
+[llama.cpp v1.0.0 release](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0)
