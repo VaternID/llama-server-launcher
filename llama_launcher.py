@@ -57,7 +57,7 @@ def P(key, label, flag, default="", subtype="file", essential=False, aliases=Non
                 subtype=subtype, default=default, essential=essential,
                 aliases=aliases or [], help=help)
 
-CACHE_TYPES = ["f32", "f16", "bf16", "q8_0", "q4_0", "q4_1", "iq4_nl", "q5_0", "q5_1"]
+CACHE_TYPES = ["f32", "f16", "bf16", "f8_e4m3", "q8_0", "q4_0", "q4_1", "iq4_nl", "q5_0", "q5_1"]
 ONOFFAUTO = ["on", "off", "auto"]
 ONOFF = ["on", "off"]
 ZEROONE = ["0", "1"]
@@ -110,6 +110,7 @@ COMMON = [
     F('cpu_moe', 'Keep all MoE weights on CPU (-cmoe)', '--cpu-moe', aliases=['-cmoe'], help=HELP['cpu_moe']),
     V('n_cpu_moe', 'N CPU MoE layers (-ncmoe)', '--n-cpu-moe', '', aliases=['-ncmoe'], help=HELP['n_cpu_moe']),
     V('moe_cache_mib', 'MoE cache MiB', '--moe-cache-mib', '', help=HELP['moe_cache_mib']),
+    V('moe_cache_cpu_share', 'MoE cache CPU share (0-1)', '--moe-cache-cpu-share', '', help=HELP['moe_cache_cpu_share']),
     V('n_cpu_ffn', 'N CPU FFN layers (-ncffn)', '--n-cpu-ffn', '', aliases=['-ncffn'], help=HELP['n_cpu_ffn']),
     V('n_gpu_layers', 'GPU layers (-ngl)', '--gpu-layers', 'all', essential=True, aliases=['-ngl', '--n-gpu-layers'], help=HELP['n_gpu_layers']),
     C('split_mode', 'Split mode (-sm)', '--split-mode', ['none', 'layer', 'row', 'tensor'], aliases=['-sm'], help=HELP['split_mode']),
@@ -127,6 +128,7 @@ COMMON = [
     V('control_vector_scaled', 'Control vector scaled', '--control-vector-scaled', '', help=HELP['control_vector_scaled']),
     V('control_vector_layer_range', 'Control vector layer range', '--control-vector-layer-range', '', help=HELP['control_vector_layer_range']),
     P('model', 'Model file (-m)', '--model', '', subtype='file', essential=True, aliases=['-m'], help=HELP['model']),
+    V('shard', 'Extra GGUF shards (--shard)', '--shard', '', aliases=['--ple'], help=HELP['shard']),
     V('model_url', 'Model URL (-mu)', '--model-url', '', aliases=['-mu'], help=HELP['model_url']),
     V('docker_repo', 'Docker Hub repo (-dr)', '--docker-repo', '', aliases=['-dr'], help=HELP['docker_repo']),
     V('hf_repo', 'HF repo (-hf)', '--hf-repo', '', aliases=['-hf', '-hfr'], help=HELP['hf_repo']),
@@ -271,6 +273,7 @@ SERVER = [
     B('ui_mcp_proxy', 'UI MCP CORS proxy (experimental)', '--ui-mcp-proxy', '--no-ui-mcp-proxy', 'default', aliases=['--webui-mcp-proxy', '--no-webui-mcp-proxy'], help=HELP['ui_mcp_proxy']),
     V('tools', 'Built-in agent tools', '--tools', '', help=HELP['tools']),
     V('tools_runtime', 'Tools runtime', '--tools-runtime', '', help=HELP['tools_runtime']),
+    F('allow_unauthenticated_tools', 'Allow unauthenticated tools', '--allow-unauthenticated-tools', help=HELP['allow_unauthenticated_tools']),
     P('mcp_servers_config', 'MCP servers config (JSON)', '--mcp-servers-config', '', subtype='file', help=HELP['mcp_servers_config']),
     V('mcp_servers_json', 'MCP servers (inline JSON)', '--mcp-servers-json', '', help=HELP['mcp_servers_json']),
     B('agent', 'Agent mode (-ag)', '--agent', '--no-agent', 'default', aliases=['-ag', '-no-ag'], help=HELP['agent']),
@@ -294,6 +297,7 @@ SERVER = [
     B('slots', 'Slots monitoring endpoint', '--slots', '--no-slots', 'default', help=HELP['slots']),
     P('slot_save_path', 'Slot save path', '--slot-save-path', '', subtype='dir', help=HELP['slot_save_path']),
     P('media_path', 'Media path', '--media-path', '', subtype='dir', help=HELP['media_path']),
+    F('media_allow_private_urls', 'Allow private media URLs', '--media-allow-private-urls', help=HELP['media_allow_private_urls']),
     P('models_dir', 'Models directory (router)', '--models-dir', '', subtype='dir', help=HELP['models_dir']),
     P('models_preset', 'Models preset INI (router)', '--models-preset', '', subtype='file', help=HELP['models_preset']),
     V('models_max', 'Max simultaneous models (router)', '--models-max', '', help=HELP['models_max']),
@@ -325,6 +329,8 @@ SERVER = [
     F('gpt_oss_120b_default', 'Use gpt-oss-120b default', '--gpt-oss-120b-default', help=HELP['gpt_oss_120b_default']),
     F('vision_gemma_4b_default', 'Use Gemma 3 4B QAT default', '--vision-gemma-4b-default', help=HELP['vision_gemma_4b_default']),
     F('vision_gemma_12b_default', 'Use Gemma 3 12B QAT default', '--vision-gemma-12b-default', help=HELP['vision_gemma_12b_default']),
+    V('tts_lang', 'TTS language (ISO 639-1)', '--tts-lang', '', help=HELP['tts_lang']),
+    V('tts_voice', 'TTS voice', '--tts-voice', '', help=HELP['tts_voice']),
 ]
 
 ALL_CATEGORIES = [
